@@ -1,10 +1,4 @@
 
-# ignore build folder
-build/
-
-# ignore node modules folder
-
-
 # MacOS Index File
 .DS_Store
 
