@@ -44,8 +44,8 @@
             </div>
 
             <div v-if="state=='result'" key="result" style="display: flex; flex-direction: column; justify-content: flex-start; align-items: center;">
-                <h3> 結果 </h3>
-                <div style="font-size: 76px; font-weight: bolder;"> {{ result.score }} </div>
+                <h3 id="result"> 結果 </h3>
+                <div id="score" style="font-size: 76px; font-weight: bolder;"> {{ result.score }} </div>
                 <div v-for="(item, index) in result.answers" :key="index">
                     <div style="width: 100%; margin: 16px 0; padding: 8px; border-radius: 8px;" v-bind:class="{ correct: result.passed[index], wrong: !result.passed[index] }">
                         <h5> {{ item.name }} </h5>
@@ -174,7 +174,9 @@ export default {
                 body: JSON.stringify(data)
             }).then(r => r.json());
 
-            this.state = "result"
+            this.state = "result";
+            await wait(100);
+            document.querySelector("#result").scrollIntoView({behavior: "smooth"});
         }
     },
     mounted: function() {
