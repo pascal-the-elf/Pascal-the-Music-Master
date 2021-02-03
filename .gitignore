@@ -1,3 +1,5 @@
+# ignore dist
+dist/
 
 # MacOS Index File
 .DS_Store
