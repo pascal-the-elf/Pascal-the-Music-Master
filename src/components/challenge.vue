@@ -175,8 +175,7 @@ export default {
             }).then(r => r.json());
 
             this.state = "result";
-            await wait(100);
-            document.querySelector("#result").scrollIntoView({behavior: "smooth"});
+            document.querySelector("#app").scrollIntoView({behavior: "smooth"});
         }
     },
     mounted: function() {
