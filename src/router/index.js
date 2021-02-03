@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import start from '@/components/start'
-import login from '@/components/login'
-import register from '@/components/register'
-import game from '@/components/game'
-import test from '@/components/test'
+// import start from '@/components/start'
+// import login from '@/components/login'
+// import register from '@/components/register'
+import challenge from '@/components/challenge'
+// import test from '@/components/test'
 
 Vue.use(Router)
 
@@ -31,13 +31,13 @@ let router = new Router({
             component: test
         }, */
         {
-            path: '/game',
-            name: 'game',
-            component: game
+            path: '/challenge/:set_id',
+            name: 'challenge',
+            component: challenge
         },
         {
             path: '/*',
-            redirect: '/game'
+            redirect: '/challenge'
         }
     ]
 });
