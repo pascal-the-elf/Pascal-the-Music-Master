@@ -4,6 +4,7 @@ import Router from 'vue-router'
 // import login from '@/components/login'
 // import register from '@/components/register'
 import challenge from '@/components/challenge'
+import create_set from '@/components/create_set'
 // import test from '@/components/test'
 
 Vue.use(Router)
@@ -30,6 +31,15 @@ let router = new Router({
             name: 'test',
             component: test
         }, */
+        {
+            path: '/create',
+            name: 'create_set',
+            component: create_set
+        },
+        {
+            path: '/challenge/',
+            redirect: '/challenge/TEST01'
+        },
         {
             path: '/challenge/:set_id',
             name: 'challenge',
