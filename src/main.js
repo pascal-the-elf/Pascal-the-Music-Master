@@ -71,5 +71,8 @@ new Vue({
     router: router,
     components: { App },
     template: "<App/>",
-    watch: {}
+    watch: {},
+    metaInfo: {
+      title: "Pascal the Music Master"
+    }
 })

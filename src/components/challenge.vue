@@ -1,5 +1,5 @@
 <template>
-    <div class="game">
+    <div class="challenge">
         <div class="top-bar" style="height: 80px;">
             <div style="position: absolute; left: 0; top: 0;">
                 <h2>Music Master</h2>
@@ -62,10 +62,10 @@
 
 <script>
 export default {
-    name: 'game',
+    name: 'challenge',
     data () {
         return {
-            text_title: 'Game',
+            text_title: 'Challenge',
             button_text: [],
             selected: [],
             ld: false,
@@ -187,7 +187,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.game {
+.challenge {
     margin: 20px auto auto auto;
     min-height: 90vh;
 }
