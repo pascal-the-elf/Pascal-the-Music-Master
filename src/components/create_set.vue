@@ -139,6 +139,11 @@ export default {
             }).then(r => r.json())
 
             console.log(this.result)
+            if(this.result) this.$swal.fire("發布成功", location.origin + "/#/challenge/" + this.result.id, "success").then(() => {
+                let win = window.open("url", "_blank")
+                setTimeout(()=>{win.location = location.origin + "/#/challenge/" + this.result.id}, 100)
+            })
+            else this.$swal.fire("發布失敗", "不知道哪裡出錯了 QQ", "error")
         },
         youtube_parser(url) {
             let regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
