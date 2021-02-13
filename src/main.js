@@ -1,4 +1,6 @@
 /* import js libraries */
+import "core-js/modules/es.promise"
+import "core-js/modules/es.array.iterator"
 import Vue from "vue"
 import Vuex from "vuex"
 import vSelect from "vue-select"

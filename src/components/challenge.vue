@@ -12,9 +12,17 @@
         </div>
 
         <transition name="fade" mode="out-in">
+            <div v-if="state=='load'" key="load">
+                <b-button variant="primary" style="margin: 4px;" @click="preparation()"> 開始測驗 </b-button>
+            </div>
+
             <div v-if="state=='loading'" key="loading">
                 <h3>請稍後，正在載入資源</h3>
-                <h4> {{ ld_state }} </h4>
+                <transition name="fade" :duration="250" mode="out-in">
+                    <h4 v-if="ld_state=='正在建立新測驗'" key="cnc"> {{ ld_state }} </h4>
+                    <h4 v-if="ld_state=='正在建立音源資料'" key="bss"> {{ ld_state }} </h4>
+                    <h4 v-if="ld_state=='載入完成'" key="dn"> {{ ld_state }} </h4>
+                </transition>
             </div>
 
             <div v-if="state=='preparing'" key="preparing">
@@ -69,7 +77,7 @@ export default {
             button_text: [],
             selected: [],
             ld: false,
-            state: "loading",
+            state: "load",
             timer: 0,
             ld_state: "Loading",
             result: {}
@@ -84,6 +92,7 @@ export default {
     },
     methods: {
         async preparation () {
+            this.state = "loading";
             this.$store.state.challenge = {};
             this.$store.state.challenge.set = this.$route.params.set_id || "TEST01";
             console.log("[Preparation] Set ID", this.$store.state.challenge.set);
@@ -100,7 +109,6 @@ export default {
                 this.$store.state.challenge[item] = source[item]
             });
 
-            this.ld_state = "正在請求音源資料";
             let sounds = [];
             this.$store.state.challenge.questions.forEach(item => {
                 sounds.push(fetch(`https://music-master.pascaltheelf.workers.dev/sound.mp3?src=${item}`).then(r=>r.blob()));
@@ -180,7 +188,6 @@ export default {
     },
     mounted: function() {
         document.title = this.title || this.text_title || document.title || "";
-        this.preparation();
     }
 }
 </script>
