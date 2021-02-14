@@ -6,7 +6,7 @@
             </div>
             <transition name="fade" mode="out-in">
                 <div v-if="true" style="position: absolute; right: 0; top: 0; text-align: right;">
-                    <h3>建立新測驗</h3>
+                    <h3>建立新題庫</h3>
                 </div>
             </transition>
         </div>
@@ -14,9 +14,9 @@
         <div key="basic">
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
-                    <span class="input-group-text">測驗名稱</span>
+                    <span class="input-group-text">題庫名稱</span>
                 </div>
-                <input type="text" class="form-control" placeholder="測驗顯示名稱 (上限 24 字元)" v-model="name">
+                <input type="text" class="form-control" placeholder="題庫顯示名稱 (上限 24 字元)" v-model="name">
             </div>
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
@@ -164,9 +164,9 @@ export default {
                 body: JSON.stringify(data)
             }).then(r => {return r.ok ? r.json() : null })
 
+            let v = this
             if(this.result) this.$swal.fire("發布成功", location.origin + "/#/challenge/" + this.result.id, "success").then(() => {
-                let win = window.open("url", "_blank")
-                setTimeout(()=>{win.location = location.origin + "/#/challenge/" + this.result.id}, 100)
+                v.$router.replace("challenge/" + v.result.id)
             })
             else {
                 this.$swal.fire("發布失敗", "不知道哪裡出錯了 QQ", "error")

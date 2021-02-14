@@ -3,8 +3,8 @@ import Router from 'vue-router'
 // import start from '@/components/start'
 // import login from '@/components/login'
 // import register from '@/components/register'
-import challenge from '@/components/challenge'
-import create_set from '@/components/create_set'
+const challenge = () => import('@/components/challenge')
+const create_set = () => import('@/components/create_set')
 // import test from '@/components/test'
 
 Vue.use(Router)

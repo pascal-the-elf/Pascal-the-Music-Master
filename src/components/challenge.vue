@@ -120,7 +120,7 @@ export default {
                 })
             }).then(r => r.json());
             console.log("[Preparation] Source", source);
-            ["id", "name", "options", "questions", "time", "created"].forEach(item => {
+            ["id", "name", "options", "questions", "time", "created", "splits"].forEach(item => {
                 this.$store.state.challenge[item] = source[item]
             });
 
@@ -133,6 +133,7 @@ export default {
                 let elm = document.createElement("audio");
                 elm.src = URL.createObjectURL(item);
                 elm.id = "sound_"+i;
+                elm.currentTime = this.$store.state.challenge.splits[i]
                 return elm;
             });
             console.log("[Preparation] Sounds", this.$store.state.challenge.sounds);
