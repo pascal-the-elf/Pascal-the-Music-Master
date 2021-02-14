@@ -51,6 +51,12 @@
                                 </div>
                                 <input type="text" class="form-control" placeholder="貼上 Youtube ID 或 Youtube 連結" :value="list[index].id" @change="parse_id(index, $event)">
                             </div>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">起始截切(秒)</span>
+                                </div>
+                                <input type="text" class="form-control" placeholder="音檔開始時間 (預設從頭開始)" :value="list[index].start" @change="list[index].start = parseInt(this.$event.target.value)">
+                            </div>
                             <div v-show="sound_state[index]"> {{ (sound_state[index] == list[index].id) ? "" : sound_state[index] }} <audio :ref="'sound_'+index" v-if="sound_state[index] == list[index].id" controls></audio> </div>
                         </div>
                     </div>
@@ -59,7 +65,7 @@
             <button type="button" class="btn btn-primary btn-lg btn-block" @click="add_item()">新增歌曲</button>
         </div>
         <br>
-        <button ref="create" type="button" class="btn btn-primary btn-lg btn-block" @click="create()">建立</button>
+        <button ref="create" type="button" class="btn btn-outline-success btn-lg btn-block" @click="create()">建立</button>
         <br>
 
         <div class="copyright">2021 © Pascal the Elf</div>
@@ -88,6 +94,7 @@ export default {
             this.list.push({
                 id: "",
                 name: "",
+                start: 0,
                 show: true
             })
             this.sound_state.push(0)
@@ -107,6 +114,10 @@ export default {
         },
         async store_sound(index) {
             let id = this.list[index].id
+            if(id.length < 11) {
+                this.sound_state[index] = 0
+                return
+            }
             this.sound_state[index] = "查詢中..."
             let ok = await fetch(`https://music-master.pascaltheelf.workers.dev/store`, {
                 method: "POST",
@@ -132,18 +143,35 @@ export default {
             data.name = this.name
             data.owner = this.owner
             data.settings = this.settings
-            data.list = this.list.map(obj => {return {id: obj.id, name: obj.name}})
+            data.list = this.list.map(obj => {return {id: obj.id, name: obj.name, start: obj.start}})
+            if(data.name.length < 3) {
+                this.$swal.fire("發布失敗", "題庫名稱至少需要 3 個字", "error")
+                this.$refs.create.disabled = false
+                return
+            }
+            if(data.settings.t < 6) {
+                this.$swal.fire("發布失敗", "時間最少需要 6 秒", "error")
+                this.$refs.create.disabled = false
+                return
+            }
+            if(data.list.length < 2) {
+                this.$swal.fire("發布失敗", "列表最少需要兩首歌曲", "error")
+                this.$refs.create.disabled = false
+                return
+            }
             this.result = await fetch(`https://music-master.pascaltheelf.workers.dev/set/create`, {
                 method: "POST",
                 body: JSON.stringify(data)
-            }).then(r => r.json())
+            }).then(r => {return r.ok ? r.json() : null })
 
-            console.log(this.result)
             if(this.result) this.$swal.fire("發布成功", location.origin + "/#/challenge/" + this.result.id, "success").then(() => {
                 let win = window.open("url", "_blank")
                 setTimeout(()=>{win.location = location.origin + "/#/challenge/" + this.result.id}, 100)
             })
-            else this.$swal.fire("發布失敗", "不知道哪裡出錯了 QQ", "error")
+            else {
+                this.$swal.fire("發布失敗", "不知道哪裡出錯了 QQ", "error")
+                this.$refs.create.disabled = false
+            }
         },
         youtube_parser(url) {
             let regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
@@ -153,6 +181,7 @@ export default {
     },
     mounted: function() {
         document.title = this.title || this.text_title || document.title || ""
+        this.add_item()
         this.add_item()
     }
 }

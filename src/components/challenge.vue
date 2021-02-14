@@ -15,9 +15,9 @@
             <div v-if="state=='load'" key="load">
                 <h3> {{ info.name || "..." }} </h3>
                 <ul>
-                    <li>題數： {{ info.q || "..." }} 題</li>
-                    <li>時限： {{ info.t || "..." }} 秒</li>
-                    <li>題庫大小： {{ info.list.length || "..." }} 題</li>
+                    <li>題數： {{ info.settings ? info.settings.q : "..." }} 題</li>
+                    <li>時限： {{ info.settings ? info.settings.t : "..." }} 秒</li>
+                    <li>題庫大小： {{ info.list ? info.list.length : "..." }} 題</li>
                 </ul>
                 <b-button variant="primary" style="margin: 4px;" @click="preparation()"> 載入測驗 </b-button>
             </div>
@@ -103,6 +103,7 @@ export default {
                 let id = this.$route.params.set_id || "TEST01"
                 let info = await fetch(`https://music-master.pascaltheelf.workers.dev/set/info?id=${id}`).then(r => r.json())
                 this.info = info
+                console.log(info)
             } catch(e) { this.$swal.fire("找不到題庫", "這個題庫不存在或消失了", "error").then(() => {this.$router.replace("/")}) }
         },
         async preparation () {
