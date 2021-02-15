@@ -2,7 +2,7 @@
     <div class="challenge">
         <div class="top-bar" style="height: 80px;">
             <div style="position: absolute; left: 0; top: 0;">
-                <h2>Music Master</h2>
+                <router-link to="/" style="text-decoration: none; color: inherit;"><h2>Music Master</h2></router-link>
             </div>
             <transition name="fade" mode="out-in">
                 <div v-if="state=='play'" style="position: absolute; right: 0; top: 0; text-align: right;">
@@ -20,6 +20,9 @@
                     <li>題庫大小： {{ info.list ? info.list.length : "..." }} 題</li>
                 </ul>
                 <b-button variant="primary" style="margin: 4px;" @click="preparation()"> 載入測驗 </b-button>
+                <ul class="list-group mt-2 mb-2">
+                    <li v-for="itm in info.list" class="list-group-item p-2" style="background-color: rgba(255, 255, 255, 0.3)"> {{ itm }} </li>
+                </ul>
             </div>
 
             <div v-if="state=='loading'" key="loading">

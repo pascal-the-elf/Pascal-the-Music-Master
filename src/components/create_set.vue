@@ -2,7 +2,7 @@
     <div class="create_set">
         <div class="top-bar" style="height: 80px;">
             <div style="position: absolute; left: 0; top: 0;">
-                <h2>Music Master</h2>
+                <router-link to="/" style="text-decoration: none; color: inherit;"><h2>Music Master</h2></router-link>
             </div>
             <transition name="fade" mode="out-in">
                 <div v-if="true" style="position: absolute; right: 0; top: 0; text-align: right;">
@@ -16,7 +16,7 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">題庫名稱</span>
                 </div>
-                <input type="text" class="form-control" placeholder="題庫顯示名稱 (上限 24 字元)" v-model="name">
+                <input type="text" class="form-control" placeholder="題庫顯示名稱 (上限 64 字元)" v-model="name">
             </div>
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
@@ -42,7 +42,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">名稱</span>
                             </div>
-                            <input type="text" class="form-control" placeholder="作品顯示名稱 (上限 24 字元)" v-model="list[index].name">
+                            <input type="text" class="form-control" placeholder="作品顯示名稱 (上限 128 字元)" v-model="list[index].name">
                         </div>
                         <div v-show="item.show">
                             <div class="input-group mb-3">
@@ -101,6 +101,7 @@ export default {
         },
         remove_item(index) {
             this.list.splice(index, 1)
+            this.sound_state.splice(index, 1)
         },
         switch_show(index) {
             this.list[index].show = !this.list[index].show
@@ -110,14 +111,20 @@ export default {
             let id = evt.target.value
             if(this.youtube_parser(id)) id = this.youtube_parser(id)
             this.list[index].id = id
-            this.store_sound(index)
-        },
-        async store_sound(index) {
-            let id = this.list[index].id
             if(id.length < 11) {
                 this.sound_state[index] = 0
                 return
             }
+            this.auto_update_name(index)
+            this.store_sound(index)
+        },
+        async auto_update_name(index) {
+            let id = this.list[index].id
+            let vd = await fetch(`https://music-master.pascaltheelf.workers.dev/yt?id=${id}`).then(r => r.json())
+            if(!this.list[index].name) this.list[index].name = vd.title
+        },
+        async store_sound(index) {
+            let id = this.list[index].id
             this.sound_state[index] = "查詢中..."
             let ok = await fetch(`https://music-master.pascaltheelf.workers.dev/store`, {
                 method: "POST",

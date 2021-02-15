@@ -2,7 +2,7 @@
     <div class="set_list">
         <div class="top-bar" style="height: 80px;">
             <div style="position: absolute; left: 0; top: 0;">
-                <h2>Music Master</h2>
+                <router-link to="/" style="text-decoration: none; color: inherit;"><h2>Music Master</h2></router-link>
             </div>
             <transition name="fade" mode="out-in">
                 <div v-if="true" style="position: absolute; right: 0; top: 0; text-align: right;">
