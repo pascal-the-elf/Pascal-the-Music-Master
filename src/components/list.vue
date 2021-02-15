@@ -20,10 +20,10 @@
                 <h3>系統題庫</h3>
                 <div v-for="(s, i) in result.g" :key="'g_'+i">
                     <router-link :to="'challenge/'+s.id" class="set_link">
-                        <div class="list_item card mb-3">
+                        <div class="list_item card mb-3" style="background-color: #ffffffdd">
                             <div class="card-body">
                                 <h4> {{ s.name }} </h4>
-                                <span> 題庫共 {{ s.a }} 題 | 每測驗 {{ s.q }} 題 作答時間 {{ s.t }} 秒 </span>
+                                <span> 題庫共 {{ s.a }} 題 | 每測驗 {{ s.q }} 題 作答時間 {{ s.t }} 秒 <br> 於 {{ new Date(s.created_time).toLocaleDateString() }} 建立</span>
                             </div>
                         </div>
                     </router-link>
@@ -31,10 +31,10 @@
                 <h3>使用者題庫</h3>
                 <div v-for="(s, i) in result.u" :key="'u_'+i">
                     <router-link :to="'challenge/'+s.id" class="set_link">
-                        <div class="list_item card mb-3">
+                        <div class="list_item card mb-3" style="background-color: #ffffffdd">
                             <div class="card-body">
                                 <h4> {{ s.name }} </h4>
-                                <span> 題庫共 {{ s.a }} 題 | 每測驗 {{ s.q }} 題 作答時間 {{ s.t }} 秒 </span>
+                                <span> 題庫共 {{ s.a }} 題 | 每測驗 {{ s.q }} 題 作答時間 {{ s.t }} 秒 <br> 於 {{ new Date(s.created_time).toLocaleDateString() }} 建立</span>
                             </div>
                         </div>
                     </router-link>
