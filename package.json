@@ -43,6 +43,7 @@
     "babel-loader": "^8.0.0",
     "babel-plugin-transform-vue-jsx": "^3.5.0",
     "chalk": "^2.0.1",
+    "compression-webpack-plugin": "^6.1.1",
     "copy-webpack-plugin": "^6.4.1",
     "core-js": "^3.8.3",
     "css-loader": "^5.0.2",
@@ -79,6 +80,7 @@
     "webpack": "^4.46.0",
     "webpack-bundle-analyzer": ">=3.3.2",
     "webpack-cli": "^3.3.12",
+    "webpack-dashboard": "^3.3.1",
     "webpack-dev-server": "^3.11.2",
     "webpack-merge": "^4.1.0"
   },

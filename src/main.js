@@ -1,20 +1,15 @@
 /* import js libraries */
-// import "core-js/modules/es.promise"
-// import "core-js/modules/es.array.iterator"
 import Vue from "vue"
 import Vuex from "vuex"
-// import vSelect from "vue-select"
 import App from "./App"
 import router from "./router"
+import swal from "sweetalert2"
+import BootstrapVue from "bootstrap-vue"
 
 /* import css libraries */
-import BootstrapVue from "bootstrap-vue"
-import swal from "sweetalert2"
 import "bootstrap/dist/css/bootstrap.css"
 import "bootstrap-vue/dist/bootstrap-vue.css"
 import "sweetalert2/dist/sweetalert2.css"
-// import "vue-select/dist/vue-select.css"
-// import "animate.css"
 
 /* setup Vue plugins */
 // Vue.component("v-select", vSelect)
