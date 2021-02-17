@@ -55,7 +55,9 @@ const webpackConfig = merge(baseWebpackConfig, {
             minify: {
                 removeComments: true,
                 collapseWhitespace: true,
-                removeAttributeQuotes: true
+                removeAttributeQuotes: true,
+                sortAttributes: true,
+                sortClassName: true
                 // more options:
                 // https://github.com/kangax/html-minifier#options-quick-reference
             }
@@ -73,6 +75,10 @@ const webpackConfig = merge(baseWebpackConfig, {
                     globOptions: {
                         ignore: ['.*']
                     }
+                },
+                {
+                    from: path.resolve(__dirname, '../Netlify'),
+                    to: path.resolve(__dirname, '../dist')
                 }
             ]
         })

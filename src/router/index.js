@@ -1,17 +1,19 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from "vue";
+import Router from "vue-router";
 // import start from '@/components/start'
 // import login from '@/components/login'
 // import register from '@/components/register'
-const challenge = () => import('@/components/challenge')
-const create_set = () => import('@/components/create_set')
-const set_list = () => import('@/components/list')
+const challenge = () => import("@/components/challenge");
+const create_set = () => import("@/components/create_set");
+const set_list = () => import("@/components/list");
 // import test from '@/components/test'
 
-Vue.use(Router)
+Vue.use(Router);
 
 let router = new Router({
-    routes: [/*
+  mode: "history",
+  routes: [
+    /*
         {
             path: '/',
             name: 'start',
@@ -32,36 +34,42 @@ let router = new Router({
             name: 'test',
             component: test
         }, */
-        {
-            path: '/list',
-            name: 'set_list',
-            component: set_list
-        },
-        {
-            path: '/create',
-            name: 'create_set',
-            component: create_set
-        },
-        {
-            path: '/challenge/',
-            redirect: '/challenge/TEST01'
-        },
-        {
-            path: '/challenge/:set_id',
-            name: 'challenge',
-            component: challenge
-        },
-        {
-            path: '/*',
-            redirect: '/list'
-        }
-    ]
+    {
+      path: "/list",
+      name: "set_list",
+      component: set_list,
+    },
+    {
+      path: "/create",
+      name: "create_set",
+      component: create_set,
+    },
+    {
+      path: "/challenge/",
+      redirect: "/challenge/TEST01",
+    },
+    {
+      path: "/challenge/:set_id",
+      name: "challenge",
+      component: challenge,
+    },
+    {
+      path: "/*",
+      redirect: "/list",
+    },
+  ],
 });
 
 router.afterEach((to, from) => {
-    console.log(`[Router] Location changed: from ${from.name} to ${to.name}`);
-    window.params = {};
-    try { for (let [k, v] of window.location.href.split("?")[1].split("&").map(kv => kv.split("=").map(decodeURIComponent))) window.params[k] = v; } catch(e) {}
-})
+  console.log(`[Router] Location changed: from ${from.name} to ${to.name}`);
+  window.params = {};
+  try {
+    for (let [k, v] of window.location.href
+      .split("?")[1]
+      .split("&")
+      .map((kv) => kv.split("=").map(decodeURIComponent)))
+      window.params[k] = v;
+  } catch (e) {}
+});
 
-export default router
+export default router;
