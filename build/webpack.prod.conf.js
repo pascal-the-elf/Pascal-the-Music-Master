@@ -35,7 +35,7 @@ const webpackConfig = merge(baseWebpackConfig, {
             'process.env': env
         }),
         new MiniCssExtractPlugin({
-            filename: 'css/[name].[contenthash].css',
+            filename: utils.assetsPath('css/[name].[contenthash].css'),
             ignoreOrder: true
         }),
         // Compress extracted CSS. We are using this plugin so that possible
