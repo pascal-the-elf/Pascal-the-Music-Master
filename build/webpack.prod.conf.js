@@ -63,8 +63,6 @@ const webpackConfig = merge(baseWebpackConfig, {
         new PreloadWebpackPlugin(),
         // keep module.id stable when vendor modules does not change
         new webpack.HashedModuleIdsPlugin(),
-        // enable scope hoisting
-        new webpack.optimize.ModuleConcatenationPlugin(),
 
         // copy custom static assets
         new CopyWebpackPlugin({
@@ -82,6 +80,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     optimization: {
         minimize: true,
         minimizer: [new TerserPlugin()],
+        concatenateModules: true
     }
 })
 

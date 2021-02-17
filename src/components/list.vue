@@ -16,7 +16,7 @@
                 <h4>載入中...</h4>
             </div>
             <div v-if="result" key="result">
-                <router-link type="button" class="btn btn-outline-primary btn-lg btn-block mb-3" to="create"> 建立新題庫 </router-link>
+                <router-link class="btn btn-outline-primary btn-lg btn-block mb-3" to="create"> 建立新題庫 </router-link>
                 <h3>系統題庫</h3>
                 <div v-for="(s, i) in result.g" :key="'g_'+i">
                     <router-link :to="'challenge/'+s.id" class="set_link">

@@ -1,3 +1,8 @@
+/* import css libraries */
+import "bootstrap/dist/css/bootstrap.css"
+import "bootstrap-vue/dist/bootstrap-vue.css"
+import "sweetalert2/dist/sweetalert2.css"
+
 /* import js libraries */
 import Vue from "vue"
 import Vuex from "vuex"
@@ -5,11 +10,6 @@ import App from "./App"
 import router from "./router"
 import swal from "sweetalert2"
 import BootstrapVue from "bootstrap-vue"
-
-/* import css libraries */
-import "bootstrap/dist/css/bootstrap.css"
-import "bootstrap-vue/dist/bootstrap-vue.css"
-import "sweetalert2/dist/sweetalert2.css"
 
 /* setup Vue plugins */
 // Vue.component("v-select", vSelect)
