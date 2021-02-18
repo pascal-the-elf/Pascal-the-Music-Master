@@ -7,6 +7,7 @@ const path = require('path')
 const baseWebpackConfig = require('./webpack.base.conf')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
 
@@ -51,8 +52,10 @@ const devWebpackConfig = merge(baseWebpackConfig, {
             'process.env': require('../config/dev.env')
         }),
         new webpack.HotModuleReplacementPlugin(),
-        new webpack.NamedModulesPlugin(), // HMR shows correct file names in console on update.
-        new webpack.NoEmitOnErrorsPlugin(),
+        new MiniCssExtractPlugin({
+            filename: utils.assetsPath('css/[name].[contenthash].css'),
+            ignoreOrder: true
+        }),
         // https://github.com/ampedandwired/html-webpack-plugin
         new HtmlWebpackPlugin({
             filename: 'index.html',
@@ -71,7 +74,11 @@ const devWebpackConfig = merge(baseWebpackConfig, {
                 }
             ]
         })
-    ]
+    ],
+    optimization: {
+        namedModules: true,
+        noEmitOnErrors: true
+    }
 })
 
 module.exports = new Promise((resolve, reject) => {
