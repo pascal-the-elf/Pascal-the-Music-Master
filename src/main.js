@@ -1,9 +1,9 @@
-/* import css libraries */
+/* css libraries */
 import "bootstrap/dist/css/bootstrap.css"
 import "bootstrap-vue/dist/bootstrap-vue.css"
 import "sweetalert2/dist/sweetalert2.css"
 
-/* import js libraries */
+/* js libraries */
 import Vue from "vue"
 import Vuex from "vuex"
 import App from "./App"
