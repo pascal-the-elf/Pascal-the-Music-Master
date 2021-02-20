@@ -3,6 +3,7 @@ import Router from "vue-router";
 // import start from '@/components/start'
 // import login from '@/components/login'
 // import register from '@/components/register'
+const home = () => import("@/components/home");
 const challenge = () => import("@/components/challenge");
 const create_set = () => import("@/components/create_set");
 const set_list = () => import("@/components/list");
@@ -36,6 +37,11 @@ let router = new Router({
             component: test
         }, */
         {
+            path: "/",
+            name: "home",
+            component: home,
+        },
+        {
             path: "/list",
             name: "set_list",
             component: set_list,
@@ -61,7 +67,7 @@ let router = new Router({
         },
         {
             path: "/*",
-            redirect: "/list",
+            redirect: "/",
         },
     ],
 });
