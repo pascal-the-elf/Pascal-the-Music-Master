@@ -17,10 +17,25 @@
                         top: 0;
                         text-align: right;
                     "
+                    :key="state"
                 >
                     <p>
                         {{ $store.state.challenge.name }} <br />
                         可用時間： {{ timer / 1000 }} 秒
+                    </p>
+                </div>
+                <div
+                    v-if="state == 'result'"
+                    style="
+                        position: absolute;
+                        right: 0;
+                        top: 0;
+                        text-align: right;
+                    "
+                    :key="state"
+                >
+                    <p>
+                        <a @click="share()" href="javascript:void(0)"> 分享 </a>
                     </p>
                 </div>
             </transition>
@@ -52,6 +67,7 @@
                         v-for="itm in info.list"
                         class="list-group-item p-2"
                         style="background-color: rgba(255, 255, 255, 0.3)"
+                        :key="itm"
                     >
                         {{ itm }}
                     </li>
@@ -133,6 +149,7 @@
                                 <option
                                     v-for="option in options"
                                     :value="option"
+                                    :key="option"
                                 >
                                     {{ option }}
                                 </option>
@@ -161,7 +178,7 @@
                     align-items: center;
                 "
             >
-                <h3 id="result">結果</h3>
+                <h3 id="result" style="margin: -10px">結果</h3>
                 <div id="score" style="font-size: 76px; font-weight: bolder">
                     {{ result.score }}
                 </div>
@@ -370,6 +387,27 @@ export default {
             document
                 .querySelector("#app")
                 .scrollIntoView({ behavior: "smooth" });
+        },
+        async share() {
+            try {
+                let data = {
+                    title: "Result | Pascal the Music Master",
+                    text:
+                        this.result.player +
+                        "的測驗結果 @ " +
+                        this.result.name +
+                        " 題庫 | Pascal the Music Master",
+                    url: location.origin + "/result/" + this.result.id,
+                };
+
+                await navigator.share(data);
+            } catch (e) {
+                this.$swal.fire({
+                    title: "分享測驗結果",
+                    input: "text",
+                    inputValue: location.origin + "/result/" + this.result.id,
+                });
+            }
         },
     },
     mounted: function () {

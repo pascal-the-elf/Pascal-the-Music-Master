@@ -5,6 +5,7 @@ import Router from "vue-router";
 // import register from '@/components/register'
 const home = () => import("@/components/home");
 const challenge = () => import("@/components/challenge");
+const result = () => import("@/components/result");
 const create_set = () => import("@/components/create_set");
 const set_list = () => import("@/components/list");
 const auth = () => import("@/components/auth");
@@ -64,6 +65,11 @@ let router = new Router({
             path: "/challenge/:set_id",
             name: "challenge",
             component: challenge,
+        },
+        {
+            path: "/result/:id",
+            name: "result",
+            component: result,
         },
         {
             path: "/*",
