@@ -82,6 +82,7 @@
                     </h4>
                     <h4 v-if="ld_state == '正在建立音源資料'" key="bss">
                         {{ ld_state }}
+                        <small> {{ all_source_progress }} %</small>
                     </h4>
                     <h4 v-if="ld_state == '載入完成'" key="dn">
                         {{ ld_state }}
@@ -231,6 +232,8 @@ export default {
             ld_state: "Loading",
             result: {},
             info: {},
+            source_progress: null,
+            all_source_progress: 0,
         };
     },
     computed: {
@@ -262,6 +265,7 @@ export default {
             }
         },
         async preparation() {
+            let self = this;
             this.state = "loading";
             this.$store.state.challenge = {};
             this.$store.state.challenge.set =
@@ -295,13 +299,45 @@ export default {
             });
 
             let sounds = [];
-            this.$store.state.challenge.questions.forEach((item) => {
+
+            this.source_progress = new Array(
+                this.$store.state.challenge.questions.length
+            ).fill(0);
+
+            this.$store.state.challenge.questions.forEach((item, index) => {
                 sounds.push(
-                    fetch(
-                        `https://music-master.pascaltheelf.workers.dev/sound.mp3?src=${item}`
-                    ).then((r) => r.blob())
+                    new Promise(async (resolve, reject) => {
+                        let response = await fetch(
+                            `https://music-master.pascaltheelf.workers.dev/sound.mp3?src=${item}`
+                        );
+
+                        let reader = response.body.getReader();
+
+                        let content = +response.headers.get("Content-Length");
+
+                        let received = 0;
+                        let chunks = [];
+                        while (true) {
+                            const { done, value } = await reader.read();
+
+                            if (done) break;
+
+                            chunks.push(value);
+                            received += value.length;
+
+                            self.source_progress[index] = parseInt(
+                                (received / content) * 100
+                            );
+                            self.all_source_progress = parseInt(
+                                self.source_progress.reduce((a, b) => a + b) /
+                                    self.source_progress.length
+                            );
+                        }
+                        resolve(new Blob(chunks));
+                    })
                 );
             });
+
             this.ld_state = "正在建立音源資料";
             this.$store.state.challenge.sounds = (
                 await Promise.all(sounds)
