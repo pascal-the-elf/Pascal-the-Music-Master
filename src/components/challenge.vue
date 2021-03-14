@@ -333,7 +333,11 @@ export default {
                                     self.source_progress.length
                             );
                         }
-                        resolve(new Blob(chunks));
+                        resolve(
+                            new Blob(chunks, {
+                                type: "audio/mpeg",
+                            })
+                        );
                     })
                 );
             });
