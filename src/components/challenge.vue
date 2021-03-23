@@ -282,6 +282,7 @@ export default {
                     body: JSON.stringify({
                         player: this.$store.state.player,
                         set: this.$store.state.challenge.set,
+                        token: acm.token || null,
                     }),
                 }
             ).then((r) => r.json());

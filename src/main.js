@@ -10,20 +10,7 @@ import App from "./App";
 import router from "./router";
 import swal from "sweetalert2";
 import BootstrapVue from "bootstrap-vue";
-import firebase from "firebase/app";
-import "firebase/auth";
-
-/* setup firebase */
-let firebase_config = {
-    apiKey: "AIzaSyBCMrWo56YL5E6L-lIimQfxcVrf6SjkVw0",
-    authDomain: "ptmm-auth.firebaseapp.com",
-    projectId: "ptmm-auth",
-    storageBucket: "ptmm-auth.appspot.com",
-    messagingSenderId: "41744321150",
-    appId: "1:41744321150:web:1837c5cbacf9089535e62f",
-};
-// Initialize Firebase
-firebase.initializeApp(firebase_config);
+import ClipboardJS from "clipboard";
 
 /* setup Vue plugins */
 Vue.use(Vuex);
@@ -45,12 +32,6 @@ const swalPlugin = {
     },
 };
 Vue.use(swalPlugin);
-const firebase_plugin = {
-    install: function(Vue) {
-        Vue.prototype.$firebase = firebase;
-    },
-};
-Vue.use(firebase_plugin);
 
 /* set Vue config */
 Vue.config.productionTip = false;
@@ -95,10 +76,7 @@ const store = new Vuex.Store({
         user_state_changed({ commit }, user) {
             commit("SET_LOGIN", user !== null);
             if (user) {
-                commit("SET_USER", {
-                    displayName: user.displayName,
-                    email: user.email
-                });
+                commit("SET_USER", user);
             } else {
                 commit("SET_USER", null);
             }
@@ -107,7 +85,7 @@ const store = new Vuex.Store({
 });
 
 /* setup Vue app */
-new Vue({
+let app = new Vue({
     el: "#app",
     store: store,
     router: router,
@@ -119,6 +97,45 @@ new Vue({
     },
 });
 
-firebase.auth().onAuthStateChanged((user) => {
-    store.dispatch("user_state_changed", user);
-});
+window.acm = new (function() {
+    const self = this;
+    check_ls();
+    sync_to_store();
+
+    self.set = function(obj) {
+        self.account = obj.account || null;
+        self.token = obj.token || null;
+        save({
+            version: 20210301,
+            account: self.account,
+            token: self.token,
+        });
+        sync_to_store();
+    };
+
+    function check_ls() {
+        if (!localStorage.acm) {
+            save({
+                version: 20210301,
+                account: null,
+                token: null,
+            });
+        }
+        self.version = read().version;
+        self.account = read().account;
+        self.token = read().token;
+    }
+
+    function save(obj) {
+        localStorage.acm = btoa(JSON.stringify(obj));
+    }
+
+    function read() {
+        return JSON.parse(atob(localStorage.acm));
+    }
+    function sync_to_store() {
+        app.$store.dispatch("user_state_changed", self.account);
+    }
+})();
+
+window.ClipboardJS = ClipboardJS;

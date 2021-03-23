@@ -1,42 +1,18 @@
 import Vue from "vue";
 import Router from "vue-router";
-// import start from '@/components/start'
-// import login from '@/components/login'
-// import register from '@/components/register'
 const home = () => import("@/components/home");
 const challenge = () => import("@/components/challenge");
 const result = () => import("@/components/result");
 const create_set = () => import("@/components/create_set");
 const set_list = () => import("@/components/list");
 const auth = () => import("@/components/auth");
-// import test from '@/components/test'
+const me = () => import("@/components/me");
 
 Vue.use(Router);
 
 let router = new Router({
     mode: "history",
     routes: [
-        /*
-        {
-            path: '/',
-            name: 'start',
-            component: start
-        },
-        {
-            path: '/login',
-            name: 'login',
-            component: login
-        },
-        {
-            path: '/register',
-            name: 'register',
-            component: register
-        },
-        {
-            path: '/test',
-            name: 'test',
-            component: test
-        }, */
         {
             path: "/",
             name: "home",
@@ -70,6 +46,11 @@ let router = new Router({
             path: "/result/:id",
             name: "result",
             component: result,
+        },
+        {
+            path: "/me",
+            name: "me",
+            component: me,
         },
         {
             path: "/*",

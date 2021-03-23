@@ -10,7 +10,7 @@
             </div>
         </div>
         <div class="d-flex justify-content-start align-items-center flex-column">
-            <router-link to="auth" class="d-block btn btn-outline-primary btn-lg mb-5 main-link"> 我的帳號 </router-link>
+            <router-link to="me" class="d-block btn btn-outline-primary btn-lg mb-5 main-link"> 我的帳號 </router-link>
             <router-link to="list" class="d-block btn btn-outline-primary btn-lg mb-5 main-link"> 瀏覽題庫 </router-link>
             <router-link to="create" class="d-block btn btn-outline-primary btn-lg mb-5 main-link"> 建立題庫 </router-link>
         </div>

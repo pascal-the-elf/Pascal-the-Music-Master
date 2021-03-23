@@ -166,26 +166,40 @@ export default {
     },
     methods: {
         async login() {
+            let self = this;
             document.querySelector("#login_btn").disabled = true;
-            this.$firebase
-                .auth()
-                .signInWithEmailAndPassword(
-                    this.login_form.email,
-                    this.login_form.password
-                )
-                .then((data) => {
-                    this.$router.replace("dash");
+            let login_node = `https://music-master.pascaltheelf.workers.dev/account/login`;
+            let response = await fetch(login_node, {
+                method: "POST",
+                body: JSON.stringify({
+                    email: this.login_form.email,
+                    password: this.login_form.password,
+                }),
+            })
+                .then((r) => r.json())
+                .then((resp) => {
+                    if (resp.success) {
+                        acm.set({
+                            account: resp.user,
+                            token: resp.token || null,
+                        });
+                        self.$router.replace("me");
+                    } else {
+                        self.$toast.fire({ title: "登入失敗", icon: "error" });
+                        document.querySelector("#login_btn").disabled = false;
+                    }
                 })
-                .catch((err) => {
-                    this.$toast.fire({ title: err.message, icon: "error" });
+                .catch((e) => {
+                    self.$toast.fire({ title: "登入失敗", icon: "error" });
                     document.querySelector("#login_btn").disabled = false;
                 });
         },
         async register() {
+            let self = this;
             document.querySelector("#register_btn").disabled = true;
             if (this.register_form.name.length < 2) {
                 this.$toast.fire({
-                    title: "Username not accepted",
+                    title: "用戶名稱過短",
                     icon: "error",
                 });
                 document.querySelector("#register_btn").disabled = false;
@@ -196,63 +210,40 @@ export default {
                 this.register_form.password != this.register_form.password_cfm
             ) {
                 this.$toast.fire({
-                    title: "Passwords do not match",
+                    title: "密碼未相符",
                     icon: "error",
                 });
                 document.querySelector("#register_btn").disabled = false;
                 return;
             }
-            this.$firebase
-                .auth()
-                .createUserWithEmailAndPassword(
-                    this.register_form.email,
-                    this.register_form.password
-                )
-                .then((data) => {
-                    fetch(
-                        `https://music-master.pascaltheelf.workers.dev/account/edit`,
-                        {
-                            method: "POST",
-                            body: JSON.stringify({
-                                auth: {
-                                    email: this.register_form.email,
-                                    password: this.register_form.password,
-                                },
-                                data: {
-                                    private: {
-                                        email: this.register_form.email,
-                                    },
-                                    public: {
-                                        name: this.register_form.name,
-                                    },
-                                },
-                            }),
-                        }
-                    )
-                        .then((r) => r.json())
-                        .then((o) => {
-                            if (o.success) {
-                                this.$toast.fire({
-                                    title: "帳號已建立",
-                                    icon: "success",
-                                });
-                            } else
-                                this.$toast.fire({
-                                    title: "ERROR",
-                                    icon: "error",
-                                });
-                                document.querySelector("#register_btn").disabled = false;
-                        })
-                        .catch((err) => {
-                            this.$toast.fire({
-                                title: err.message,
-                                icon: "error",
-                            });
-                            document.querySelector("#register_btn").disabled = false;
+
+            let register_node = `https://music-master.pascaltheelf.workers.dev/account/register`;
+            let response = await fetch(register_node, {
+                method: "POST",
+                body: JSON.stringify({
+                    name: this.register_form.name,
+                    email: this.register_form.email,
+                    password: this.register_form.password,
+                    password_confirm: this.register_form.password_cfm,
+                }),
+            })
+                .then((r) => r.json())
+                .then((resp) => {
+                    if (resp.success) {
+                        acm.set({
+                            account: resp.user,
+                            token: resp.token || null,
                         });
+                        self.$router.replace("me");
+                    } else {
+                        self.$toast.fire({ title: "註冊失敗", icon: "error" });
+                        document.querySelector(
+                            "#register_btn"
+                        ).disabled = false;
+                    }
                 })
-                .catch((err) => {
-                    this.$toast.fire({ title: err.message, icon: "error" });
+                .catch((e) => {
+                    self.$toast.fire({ title: "註冊失敗", icon: "error" });
                     document.querySelector("#register_btn").disabled = false;
                 });
         },
@@ -268,15 +259,6 @@ export default {
 .auth {
     margin: 20px auto auto auto;
     min-height: 90vh;
-}
-.background {
-    z-index: -1;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(65, 105, 225, 0.15);
 }
 .copyright {
     position: absolute;
