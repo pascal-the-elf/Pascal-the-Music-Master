@@ -128,7 +128,7 @@
                                     :value="list[index].start"
                                     @change="
                                         list[index].start = parseInt(
-                                            this.$event.target.value
+                                            $event.target.value
                                         )
                                     "
                                 />
@@ -268,6 +268,7 @@ export default {
             data.name = this.name;
             data.owner = this.owner;
             data.settings = this.settings;
+            data.token = acm.token;
             data.list = this.list.map((obj) => {
                 return { id: obj.id, name: obj.name, start: obj.start };
             });
@@ -301,11 +302,11 @@ export default {
                 this.$swal
                     .fire(
                         "發布成功",
-                        location.origin + "/#/challenge/" + this.result.id,
+                        location.origin + "/challenge/" + this.result.id,
                         "success"
                     )
                     .then(() => {
-                        v.$router.replace("challenge/" + v.result.id);
+                        v.$router.replace("/challenge/" + v.result.id);
                     });
             else {
                 this.$swal.fire("發布失敗", "不知道哪裡出錯了 QQ", "error");
@@ -320,6 +321,7 @@ export default {
     },
     mounted: function () {
         document.title = this.title || this.text_title || document.title || "";
+        if (!this.$store.state.user.login) this.$router.replace("auth");
         this.add_item();
         this.add_item();
     },

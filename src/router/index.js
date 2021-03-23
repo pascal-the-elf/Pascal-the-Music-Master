@@ -4,6 +4,7 @@ const home = () => import("@/components/home");
 const challenge = () => import("@/components/challenge");
 const result = () => import("@/components/result");
 const create_set = () => import("@/components/create_set");
+const edit_set = () => import("@/components/edit_set");
 const set_list = () => import("@/components/list");
 const auth = () => import("@/components/auth");
 const me = () => import("@/components/me");
@@ -32,6 +33,11 @@ let router = new Router({
             path: "/create",
             name: "create_set",
             component: create_set,
+        },
+        {
+            path: "/edit/:id",
+            name: "edit_set",
+            component: edit_set,
         },
         {
             path: "/challenge/",

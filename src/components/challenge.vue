@@ -62,6 +62,14 @@
                 >
                     載入測驗
                 </b-button>
+                <router-link
+                    v-if="$store.state.user.login && ($store.state.user.data.uid == info.owner_uid)"
+                    class="btn btn-outline-primary"
+                    style="margin: 4px"
+                    :to="'/edit/'+$route.params.set_id"
+                >
+                    修改
+                </router-link>
                 <ul class="list-group mt-2 mb-2">
                     <li
                         v-for="itm in info.list"
