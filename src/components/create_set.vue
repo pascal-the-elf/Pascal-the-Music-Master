@@ -326,7 +326,8 @@ export default {
                 .fire({
                     title: "匯入播放列表",
                     text: "使用連結從 Youtube 匯入播放列表",
-                    input: "text",
+                    input: "url",
+                    inputPlaceholder: "https://www.youtube.com/playlist?list=...",
                     inputAttributes: {
                         autocapitalize: "off",
                     },
