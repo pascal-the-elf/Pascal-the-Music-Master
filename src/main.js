@@ -139,3 +139,7 @@ window.acm = new (function() {
 })();
 
 window.ClipboardJS = ClipboardJS;
+
+Vue.prototype.api = window.api = {
+    server: `https://music-master.pascaltheelf.workers.dev`
+}

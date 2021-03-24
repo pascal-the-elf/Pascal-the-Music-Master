@@ -103,10 +103,10 @@ export default {
     methods: {
         async load_sets() {
             let g_sets = fetch(
-                `https://music-master.pascaltheelf.workers.dev/set/list?type=global`
+                `${api.server}/set/list?type=global`
             ).then((r) => r.json());
             let u_sets = fetch(
-                `https://music-master.pascaltheelf.workers.dev/set/list?type=user`
+                `${api.server}/set/list?type=user`
             ).then((r) => r.json());
             let r = { g: [], u: [] };
             g_sets = await g_sets;

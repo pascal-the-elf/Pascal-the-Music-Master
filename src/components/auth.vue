@@ -168,7 +168,7 @@ export default {
         async login() {
             let self = this;
             document.querySelector("#login_btn").disabled = true;
-            let login_node = `https://music-master.pascaltheelf.workers.dev/account/login`;
+            let login_node = `${api.server}/account/login`;
             let response = await fetch(login_node, {
                 method: "POST",
                 body: JSON.stringify({
@@ -217,7 +217,7 @@ export default {
                 return;
             }
 
-            let register_node = `https://music-master.pascaltheelf.workers.dev/account/register`;
+            let register_node = `${api.server}/account/register`;
             let response = await fetch(register_node, {
                 method: "POST",
                 body: JSON.stringify({

@@ -71,7 +71,15 @@
             </div>
         </div>
         <div key="list">
-            <h3>歌曲列表</h3>
+            <h3>
+                歌曲列表<a
+                    v-show="!list.length"
+                    style="font-size: 16px; margin: 0 6px"
+                    href="javascript:void(0)"
+                    @click="import_from_playlist()"
+                    >匯入播放列表</a
+                >
+            </h3>
             <div v-for="(item, index) in list" v-bind:key="index">
                 <div class="list_item card mb-3">
                     <div class="card-body">
@@ -190,14 +198,15 @@ export default {
         };
     },
     methods: {
-        add_item() {
+        add_item(id = "", name = "", start = 0) {
             this.list.push({
-                id: "",
-                name: "",
-                start: 0,
+                id: id,
+                name: name,
+                start: start,
                 show: true,
             });
-            this.sound_state.push(0);
+            this.sound_state.push(id || 0);
+            return this.list.length - 1;
         },
         remove_item(index) {
             this.list.splice(index, 1);
@@ -220,21 +229,18 @@ export default {
         },
         async auto_update_name(index) {
             let id = this.list[index].id;
-            let vd = await fetch(
-                `https://music-master.pascaltheelf.workers.dev/yt?id=${id}`
-            ).then((r) => r.json());
+            let vd = await fetch(`${api.server}/yt?id=${id}`).then((r) =>
+                r.json()
+            );
             if (!this.list[index].name) this.list[index].name = vd.title;
         },
         async store_sound(index) {
             let id = this.list[index].id;
             this.sound_state[index] = "查詢中...";
-            let ok = await fetch(
-                `https://music-master.pascaltheelf.workers.dev/store`,
-                {
-                    method: "POST",
-                    body: JSON.stringify({ id: id }),
-                }
-            ).then((r) => r.ok);
+            let ok = await fetch(`${api.server}/store`, {
+                method: "POST",
+                body: JSON.stringify({ id: id }),
+            }).then((r) => r.ok);
             if (!ok) {
                 this.sound_state[index] = "發生錯誤";
                 return;
@@ -255,9 +261,9 @@ export default {
             )
                 .map((b) => b.toString(16).padStart(2, "0"))
                 .join("");
-            this.$refs["sound_" + index][0].src =
-                "https://music-master.pascaltheelf.workers.dev/sound?src=" +
-                hash;
+            this.$refs[
+                "sound_" + index
+            ][0].src = `${api.server}/sound?src=${hash}`;
         },
         async create() {
             this.$refs.create.disabled = true;
@@ -287,13 +293,10 @@ export default {
                 this.$refs.create.disabled = false;
                 return;
             }
-            this.result = await fetch(
-                `https://music-master.pascaltheelf.workers.dev/set/create`,
-                {
-                    method: "POST",
-                    body: JSON.stringify(data),
-                }
-            ).then((r) => {
+            this.result = await fetch(`${api.server}/set/create`, {
+                method: "POST",
+                body: JSON.stringify(data),
+            }).then((r) => {
                 return r.ok ? r.json() : null;
             });
 
@@ -318,12 +321,50 @@ export default {
             let match = url.match(regExp);
             return match && match[7].length == 11 ? match[7] : false;
         },
+        async import_from_playlist() {
+            return await this.$swal
+                .fire({
+                    title: "匯入播放列表",
+                    text: "使用連結從 Youtube 匯入播放列表",
+                    input: "text",
+                    inputAttributes: {
+                        autocapitalize: "off",
+                    },
+                    showCancelButton: true,
+                    confirmButtonText: "匯入",
+                    showLoaderOnConfirm: true,
+                    preConfirm: (url) => {
+                        return this.import_list(url).catch((error) => {
+                            this.$swal.showValidationMessage(`匯入失敗`);
+                        });
+                    },
+                    allowOutsideClick: () => !this.$swal.isLoading(),
+                })
+                .then((result) => {
+                    if (result.isConfirmed) {
+                        this.$swal.fire("匯入成功", "", "success");
+                    }
+                });
+        },
+        async import_list(url) {
+            let self = this;
+            let x = await fetch(
+                `${api.server}/yt_list?url=${encodeURIComponent(url)}`
+            ).then((r) => r.json());
+
+            if (x.success) {
+                for (let i = 0; i < x.list.length; i++) {
+                    let id = this.add_item(this.youtube_parser(x.list[i].id));
+                    await this.auto_update_name(id);
+                    await this.store_sound(id);
+                }
+            }
+            return true;
+        },
     },
     mounted: function () {
         document.title = this.title || this.text_title || document.title || "";
         if (!this.$store.state.user.login) this.$router.replace("auth");
-        this.add_item();
-        this.add_item();
     },
 };
 </script>

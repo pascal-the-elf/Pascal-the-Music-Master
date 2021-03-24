@@ -81,7 +81,7 @@ export default {
             try {
                 let id = this.$route.params.id;
                 this.result = await fetch(
-                    `https://music-master.pascaltheelf.workers.dev/result?id=${id}`
+                    `${api.server}/result?id=${id}`
                 ).then((r) => r.json());
                 document
                     .querySelector("#app")

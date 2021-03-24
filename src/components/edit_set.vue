@@ -202,16 +202,13 @@ export default {
         async fetch_data() {
             try {
                 let id = this.$route.params.id;
-                let raw = await fetch(
-                    "https://music-master.pascaltheelf.workers.dev/set/raw",
-                    {
-                        method: "POST",
-                        body: JSON.stringify({
-                            id: id,
-                            token: acm.token,
-                        }),
-                    }
-                ).then((r) => r.json());
+                let raw = await fetch(`${api.server}/set/raw`, {
+                    method: "POST",
+                    body: JSON.stringify({
+                        id: id,
+                        token: acm.token,
+                    }),
+                }).then((r) => r.json());
 
                 console.log(raw);
 
@@ -266,21 +263,18 @@ export default {
         },
         async auto_update_name(index) {
             let id = this.list[index].id;
-            let vd = await fetch(
-                `https://music-master.pascaltheelf.workers.dev/yt?id=${id}`
-            ).then((r) => r.json());
+            let vd = await fetch(`${api.server}/yt?id=${id}`).then((r) =>
+                r.json()
+            );
             if (!this.list[index].name) this.list[index].name = vd.title;
         },
         async store_sound(index) {
             let id = this.list[index].id;
             this.sound_state[index] = "查詢中...";
-            let ok = await fetch(
-                `https://music-master.pascaltheelf.workers.dev/store`,
-                {
-                    method: "POST",
-                    body: JSON.stringify({ id: id }),
-                }
-            ).then((r) => r.ok);
+            let ok = await fetch(`${api.server}/store`, {
+                method: "POST",
+                body: JSON.stringify({ id: id }),
+            }).then((r) => r.ok);
             if (!ok) {
                 this.sound_state[index] = "發生錯誤";
                 return;
@@ -301,9 +295,9 @@ export default {
             )
                 .map((b) => b.toString(16).padStart(2, "0"))
                 .join("");
-            this.$refs["sound_" + index][0].src =
-                "https://music-master.pascaltheelf.workers.dev/sound?src=" +
-                hash;
+            this.$refs[
+                "sound_" + index
+            ][0].src = `${api.server}/sound?src=${hash}`;
         },
         async edit() {
             this.$refs.edit.disabled = true;
@@ -335,7 +329,7 @@ export default {
                 return;
             }
             this.result = await fetch(
-                `https://music-master.pascaltheelf.workers.dev/set/edit`,
+                `${api.server}/set/edit`,
                 {
                     method: "POST",
                     body: JSON.stringify(data),

@@ -260,7 +260,7 @@ export default {
             try {
                 let id = this.$route.params.set_id || "TEST01";
                 let info = await fetch(
-                    `https://music-master.pascaltheelf.workers.dev/set/info?id=${id}`
+                    `${api.server}/set/info?id=${id}`
                 ).then((r) => r.json());
                 this.info = info;
                 console.log(info);
@@ -284,7 +284,7 @@ export default {
             );
             this.ld_state = "正在建立新測驗";
             let source = await fetch(
-                `https://music-master.pascaltheelf.workers.dev/create`,
+                `${api.server}/create`,
                 {
                     method: "POST",
                     body: JSON.stringify({
@@ -317,7 +317,7 @@ export default {
                 sounds.push(
                     new Promise(async (resolve, reject) => {
                         let response = await fetch(
-                            `https://music-master.pascaltheelf.workers.dev/sound.mp3?src=${item}`
+                            `${api.server}/sound.mp3?src=${item}`
                         );
 
                         let reader = response.body.getReader();
@@ -425,7 +425,7 @@ export default {
             data.answers = this.selected;
             data.finish = new Date().toJSON();
             this.result = await fetch(
-                `https://music-master.pascaltheelf.workers.dev/check`,
+                `${api.server}/check`,
                 {
                     method: "POST",
                     body: JSON.stringify(data),
