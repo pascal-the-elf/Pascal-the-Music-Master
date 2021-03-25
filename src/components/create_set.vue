@@ -355,6 +355,7 @@ export default {
 
             if (x.success) {
                 for (let i = 0; i < x.list.length; i++) {
+                    try { document.querySelector("#swal2-content").innerHTML = `匯入中... (${i+1} / ${x.list.length})`; } catch(e) {}
                     let id = this.add_item(this.youtube_parser(x.list[i].id));
                     await this.auto_update_name(id);
                     await this.store_sound(id);
