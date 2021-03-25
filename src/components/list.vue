@@ -70,6 +70,8 @@
                                 <span>
                                     題庫共 {{ s.a }} 題 | 每測驗 {{ s.q }} 題
                                     作答時間 {{ s.t }} 秒 <br />
+                                    由
+                                    {{ s.owner || "使用者" }}
                                     於
                                     {{
                                         new Date(
@@ -102,12 +104,12 @@ export default {
     },
     methods: {
         async load_sets() {
-            let g_sets = fetch(
-                `${api.server}/set/list?type=global`
-            ).then((r) => r.json());
-            let u_sets = fetch(
-                `${api.server}/set/list?type=user`
-            ).then((r) => r.json());
+            let g_sets = fetch(`${api.server}/set/list?type=global`).then((r) =>
+                r.json()
+            );
+            let u_sets = fetch(`${api.server}/set/list?type=user`).then((r) =>
+                r.json()
+            );
             let r = { g: [], u: [] };
             g_sets = await g_sets;
             u_sets = await u_sets;
