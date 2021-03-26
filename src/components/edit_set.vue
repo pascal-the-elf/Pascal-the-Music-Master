@@ -90,6 +90,13 @@
                                 >
                                     移除歌曲
                                 </button>
+                                <button
+                                    type="button"
+                                    class="btn btn-outline-warning btn-sm mb-1"
+                                    @click="re_store(index)"
+                                >
+                                    重新查詢
+                                </button>
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"
@@ -148,6 +155,7 @@
                                                 sound_state[index] ==
                                                 list[index].id
                                             "
+                                            preload="metadata"
                                             controls
                                         ></audio>
                                     </div>
@@ -250,6 +258,9 @@ export default {
             this.list[index].show = !this.list[index].show;
             this.list.push();
         },
+        re_store(index) {
+            return this.store_sound(index, true);
+        },
         parse_id(index, evt) {
             let id = evt.target.value;
             if (this.youtube_parser(id)) id = this.youtube_parser(id);
@@ -263,17 +274,17 @@ export default {
         },
         async auto_update_name(index) {
             let id = this.list[index].id;
-            let vd = await fetch(`${api.server}/yt?id=${id}`).then((r) =>
+            let vd = await fetch(`${api.server}/yt/info?id=${id}`).then((r) =>
                 r.json()
             );
             if (!this.list[index].name) this.list[index].name = vd.title;
         },
-        async store_sound(index) {
+        async store_sound(index, force = false) {
             let id = this.list[index].id;
             this.sound_state[index] = "查詢中...";
-            let ok = await fetch(`${api.server}/store`, {
+            let ok = await fetch(`${api.server}/sound/store`, {
                 method: "POST",
-                body: JSON.stringify({ id: id }),
+                body: JSON.stringify({ id: id, force: force }),
             }).then((r) => r.ok);
             if (!ok) {
                 this.sound_state[index] = "發生錯誤";
@@ -297,7 +308,7 @@ export default {
                 .join("");
             this.$refs[
                 "sound_" + index
-            ][0].src = `${api.server}/sound?src=${hash}`;
+            ][0].src = `${api.server}/sound/serve?src=${hash}`;
         },
         async edit() {
             this.$refs.edit.disabled = true;
@@ -328,13 +339,10 @@ export default {
                 this.$refs.edit.disabled = false;
                 return;
             }
-            this.result = await fetch(
-                `${api.server}/set/edit`,
-                {
-                    method: "POST",
-                    body: JSON.stringify(data),
-                }
-            ).then((r) => {
+            this.result = await fetch(`${api.server}/set/edit`, {
+                method: "POST",
+                body: JSON.stringify(data),
+            }).then((r) => {
                 return r.ok ? r.json() : null;
             });
 

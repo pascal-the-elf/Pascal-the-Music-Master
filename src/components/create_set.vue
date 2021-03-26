@@ -150,6 +150,7 @@
                                 <audio
                                     :ref="'sound_' + index"
                                     v-if="sound_state[index] == list[index].id"
+                                    preload="metadata"
                                     controls
                                 ></audio>
                             </div>
@@ -229,7 +230,7 @@ export default {
         },
         async auto_update_name(index) {
             let id = this.list[index].id;
-            let vd = await fetch(`${api.server}/yt?id=${id}`).then((r) =>
+            let vd = await fetch(`${api.server}/yt/info?id=${id}`).then((r) =>
                 r.json()
             );
             if (!this.list[index].name) this.list[index].name = vd.title;
@@ -237,7 +238,7 @@ export default {
         async store_sound(index) {
             let id = this.list[index].id;
             this.sound_state[index] = "查詢中...";
-            let ok = await fetch(`${api.server}/store`, {
+            let ok = await fetch(`${api.server}/sound/store`, {
                 method: "POST",
                 body: JSON.stringify({ id: id }),
             }).then((r) => r.ok);
@@ -263,7 +264,7 @@ export default {
                 .join("");
             this.$refs[
                 "sound_" + index
-            ][0].src = `${api.server}/sound?src=${hash}`;
+            ][0].src = `${api.server}/sound/serve?src=${hash}`;
         },
         async create() {
             this.$refs.create.disabled = true;
@@ -327,7 +328,8 @@ export default {
                     title: "匯入播放列表",
                     text: "使用連結從 Youtube 匯入播放列表",
                     input: "url",
-                    inputPlaceholder: "https://www.youtube.com/playlist?list=...",
+                    inputPlaceholder:
+                        "https://www.youtube.com/playlist?list=...",
                     inputAttributes: {
                         autocapitalize: "off",
                     },
@@ -350,12 +352,16 @@ export default {
         async import_list(url) {
             let self = this;
             let x = await fetch(
-                `${api.server}/yt_list?url=${encodeURIComponent(url)}`
+                `${api.server}/yt/list?url=${encodeURIComponent(url)}`
             ).then((r) => r.json());
 
             if (x.success) {
                 for (let i = 0; i < x.list.length; i++) {
-                    try { document.querySelector("#swal2-content").innerHTML = `匯入中... (${i+1} / ${x.list.length})`; } catch(e) {}
+                    try {
+                        document.querySelector(
+                            "#swal2-content"
+                        ).innerHTML = `匯入中... (${i + 1} / ${x.list.length})`;
+                    } catch (e) {}
                     let id = this.add_item(this.youtube_parser(x.list[i].id));
                     await this.auto_update_name(id);
                     await this.store_sound(id);

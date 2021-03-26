@@ -284,7 +284,7 @@ export default {
             );
             this.ld_state = "正在建立新測驗";
             let source = await fetch(
-                `${api.server}/create`,
+                `${api.server}/challenge/create`,
                 {
                     method: "POST",
                     body: JSON.stringify({
@@ -317,7 +317,7 @@ export default {
                 sounds.push(
                     new Promise(async (resolve, reject) => {
                         let response = await fetch(
-                            `${api.server}/sound.mp3?src=${item}`
+                            `${api.server}/sound/serve?src=${item}`
                         );
 
                         let reader = response.body.getReader();
@@ -425,7 +425,7 @@ export default {
             data.answers = this.selected;
             data.finish = new Date().toJSON();
             this.result = await fetch(
-                `${api.server}/check`,
+                `${api.server}/challenge/check`,
                 {
                     method: "POST",
                     body: JSON.stringify(data),

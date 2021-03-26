@@ -81,7 +81,7 @@ export default {
             try {
                 let id = this.$route.params.id;
                 this.result = await fetch(
-                    `${api.server}/result?id=${id}`
+                    `${api.server}/challenge/result?id=${id}`
                 ).then((r) => r.json());
                 document
                     .querySelector("#app")
