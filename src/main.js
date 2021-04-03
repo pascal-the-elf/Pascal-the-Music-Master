@@ -105,10 +105,12 @@ window.acm = new (function() {
     self.set = function(obj) {
         self.account = obj.account || null;
         self.token = obj.token || null;
+        self.expired = obj.expired || null;
         save({
-            version: 20210301,
+            version: 20210401,
             account: self.account,
             token: self.token,
+            expired: self.expired,
         });
         sync_to_store();
     };
@@ -116,14 +118,23 @@ window.acm = new (function() {
     function check_ls() {
         if (!localStorage.acm) {
             save({
-                version: 20210301,
+                version: 20210401,
                 account: null,
                 token: null,
+                expired: 0
             });
         }
         self.version = read().version;
         self.account = read().account;
         self.token = read().token;
+        self.expired = read().expired || 0;
+        if(self.expired < Date.now()) {
+            localStorage.acm = "";
+            self.version = 20210401;
+            self.account = null;
+            self.token = null;
+            self.expired = 0;
+        }
     }
 
     function save(obj) {
