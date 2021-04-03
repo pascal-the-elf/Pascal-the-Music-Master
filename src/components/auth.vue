@@ -182,6 +182,7 @@ export default {
                         acm.set({
                             account: resp.user,
                             token: resp.token || null,
+                            expired: resp.expired || 0,
                         });
                         self.$router.replace("me");
                     } else {
@@ -233,6 +234,7 @@ export default {
                         acm.set({
                             account: resp.user,
                             token: resp.token || null,
+                            expired: resp.expired || 0,
                         });
                         self.$router.replace("me");
                     } else {
