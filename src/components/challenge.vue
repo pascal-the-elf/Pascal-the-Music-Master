@@ -263,7 +263,7 @@ export default {
                     `${api.server}/set/info?id=${id}`
                 ).then((r) => r.json());
                 this.info = info;
-                console.log(info);
+                // console.log(info);
             } catch (e) {
                 this.$swal
                     .fire("找不到題庫", "這個題庫不存在或消失了", "error")
@@ -294,7 +294,7 @@ export default {
                     }),
                 }
             ).then((r) => r.json());
-            console.log("[Preparation] Source", source);
+            // console.log("[Preparation] Source", source);
             [
                 "id",
                 "name",
@@ -361,10 +361,12 @@ export default {
                 elm.currentTime = this.$store.state.challenge.splits[i];
                 return elm;
             });
+            /*
             console.log(
                 "[Preparation] Sounds",
                 this.$store.state.challenge.sounds
             );
+            */
 
             this.button_text = new Array(
                 this.$store.state.challenge.questions.length
