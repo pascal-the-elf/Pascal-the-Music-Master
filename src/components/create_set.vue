@@ -363,7 +363,11 @@ export default {
                         ).innerHTML = `匯入中... (${i + 1} / ${x.list.length})`;
                     } catch (e) {}
                     let id = this.add_item(this.youtube_parser(x.list[i].id));
-                    await this.auto_update_name(id);
+                    try {
+                        await this.auto_update_name(id);
+                    } catch (e) {
+                        console.error(`auto update failed.`, e);
+                    }
                     await this.store_sound(id);
                 }
             }

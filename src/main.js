@@ -11,6 +11,7 @@ import router from "./router";
 import swal from "sweetalert2";
 import BootstrapVue from "bootstrap-vue";
 import ClipboardJS from "clipboard";
+import { gen_set_preview } from "./js/gen_preview";
 
 /* setup Vue plugins */
 Vue.use(Vuex);
@@ -121,14 +122,14 @@ window.acm = new (function() {
                 version: 20210401,
                 account: null,
                 token: null,
-                expired: 0
+                expired: 0,
             });
         }
         self.version = read().version;
         self.account = read().account;
         self.token = read().token;
         self.expired = read().expired || 0;
-        if(self.expired < Date.now()) {
+        if (self.expired < Date.now()) {
             localStorage.acm = "";
             self.version = 20210401;
             self.account = null;
@@ -152,5 +153,7 @@ window.acm = new (function() {
 window.ClipboardJS = ClipboardJS;
 
 Vue.prototype.api = window.api = {
-    server: `https://music-master.pascaltheelf.workers.dev`
-}
+    server: `https://music-master.pascaltheelf.workers.dev`,
+};
+
+window.gen_set_preview = gen_set_preview;
